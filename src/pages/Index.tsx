@@ -152,6 +152,10 @@ const Index = () => {
         </motion.div>
       </section>
 
+      {/* Mosque silhouette horizon */}
+      <MosqueSilhouette />
+      <IslamicBorder />
+
       {/* Eid message overlay */}
       <EidOverlay visible={showOverlay} onClose={handleClose} />
     </main>
