@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAmbientSound } from "@/hooks/useAmbientSound";
 import { motion } from "framer-motion";
 import Stars from "@/components/Stars";
 import CrescentMoon from "@/components/CrescentMoon";
