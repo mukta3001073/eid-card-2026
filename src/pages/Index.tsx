@@ -36,13 +36,17 @@ const Index = () => {
   const [isRising, setIsRising] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  const ambient = useAmbientSound();
+
   const handleCelebrate = () => {
     setIsRising(true);
+    ambient.play();
     setTimeout(() => setShowOverlay(true), 1500);
   };
 
   const handleClose = () => {
     setShowOverlay(false);
+    ambient.stop();
     setTimeout(() => setIsRising(false), 500);
   };
 
