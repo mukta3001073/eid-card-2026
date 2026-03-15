@@ -36,6 +36,7 @@ const lanternData = [
 
 const Index = () => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showCardModal, setShowCardModal] = useState(false);
   const [isRising, setIsRising] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
