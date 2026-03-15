@@ -171,6 +171,7 @@ const Index = () => {
 
       {/* Eid message overlay */}
       <EidOverlay visible={showOverlay} onClose={handleClose} />
+      <GreetingCardModal visible={showCardModal} onClose={() => setShowCardModal(false)} />
     </main>
   );
 };
