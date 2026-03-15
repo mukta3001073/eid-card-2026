@@ -6,6 +6,8 @@ import CrescentMoon from "@/components/CrescentMoon";
 import Lantern from "@/components/Lantern";
 import Sparkles from "@/components/Sparkles";
 import EidOverlay from "@/components/EidOverlay";
+import MosqueSilhouette from "@/components/MosqueSilhouette";
+import IslamicBorder from "@/components/IslamicBorder";
 
 const wishes = [
   "Eid Mubarak! 🌙",
