@@ -134,23 +134,34 @@ const Index = () => {
             Tap the lanterns to reveal blessings, or celebrate together
           </p>
 
-          <motion.button
-            className="px-10 py-4 rounded-full font-body text-base md:text-lg font-semibold bg-primary text-primary-foreground relative overflow-hidden group"
-            style={{
-              boxShadow: "0 0 30px hsla(45, 100%, 50%, 0.4), 0 0 60px hsla(45, 100%, 50%, 0.15)",
-            }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleCelebrate}
-          >
-            <span className="relative z-10">✨ Celebrate Eid ✨</span>
-            <motion.div
-              className="absolute inset-0 bg-accent"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: "0%" }}
-              transition={{ duration: 0.3 }}
-            />
-          </motion.button>
+          <div className="flex flex-col sm:flex-row gap-3 items-center">
+            <motion.button
+              className="px-10 py-4 rounded-full font-body text-base md:text-lg font-semibold bg-primary text-primary-foreground relative overflow-hidden group"
+              style={{
+                boxShadow: "0 0 30px hsla(45, 100%, 50%, 0.4), 0 0 60px hsla(45, 100%, 50%, 0.15)",
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleCelebrate}
+            >
+              <span className="relative z-10">✨ Celebrate Eid ✨</span>
+              <motion.div
+                className="absolute inset-0 bg-accent"
+                initial={{ x: "-100%" }}
+                whileHover={{ x: "0%" }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.button>
+
+            <motion.button
+              className="px-8 py-3 rounded-full font-body text-sm font-medium border border-primary/40 text-primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowCardModal(true)}
+            >
+              ✉️ Create Greeting Card
+            </motion.button>
+          </div>
         </motion.div>
       </section>
 
