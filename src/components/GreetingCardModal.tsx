@@ -1,35 +1,41 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toPng } from "html-to-image";
+import { CARD_THEMES, CARD_TEMPLATES } from "./card-templates/types";
+import ClassicCard from "./card-templates/ClassicCard";
+import LandscapeCard from "./card-templates/LandscapeCard";
+import MinimalCard from "./card-templates/MinimalCard";
+import OrnateCard from "./card-templates/OrnateCard";
 
 interface GreetingCardModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const CARD_THEMES = [
-  { name: "Midnight Gold", bg: "hsl(232, 70%, 11%)", accent: "hsl(51, 100%, 50%)", text: "hsl(45, 100%, 90%)" },
-  { name: "Emerald Night", bg: "hsl(150, 32%, 12%)", accent: "hsl(51, 100%, 50%)", text: "hsl(45, 100%, 90%)" },
-  { name: "Royal Purple", bg: "hsl(270, 50%, 15%)", accent: "hsl(45, 80%, 60%)", text: "hsl(45, 100%, 92%)" },
-];
+const TEMPLATE_RENDERERS: Record<string, React.FC<any>> = {
+  classic: ClassicCard,
+  landscape: LandscapeCard,
+  minimal: MinimalCard,
+  ornate: OrnateCard,
+};
 
 const GreetingCardModal = ({ visible, onClose }: GreetingCardModalProps) => {
   const [message, setMessage] = useState("Wishing you peace, happiness, and blessings on this joyous occasion.");
   const [senderName, setSenderName] = useState("");
   const [themeIdx, setThemeIdx] = useState(0);
+  const [templateId, setTemplateId] = useState("classic");
   const [downloading, setDownloading] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const theme = CARD_THEMES[themeIdx];
+  const template = CARD_TEMPLATES.find((t) => t.id === templateId)!;
+  const TemplateRenderer = TEMPLATE_RENDERERS[templateId];
 
   const handleDownload = async () => {
     if (!cardRef.current) return;
     setDownloading(true);
     try {
-      const dataUrl = await toPng(cardRef.current, {
-        pixelRatio: 3,
-        cacheBust: true,
-      });
+      const dataUrl = await toPng(cardRef.current, { pixelRatio: 3, cacheBust: true });
       const link = document.createElement("a");
       link.download = "eid-mubarak-greeting.png";
       link.href = dataUrl;
@@ -84,59 +90,34 @@ const GreetingCardModal = ({ visible, onClose }: GreetingCardModalProps) => {
             {/* Card Preview */}
             <div
               ref={cardRef}
-              className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 flex flex-col items-center justify-center p-8 text-center"
+              className={`relative w-full ${template.aspect} rounded-xl overflow-hidden mb-4 flex flex-col items-center justify-center ${templateId === "landscape" ? "p-0" : "p-8"} text-center`}
               style={{
-                background: `radial-gradient(ellipse at 50% 30%, ${theme.accent}15, ${theme.bg})`,
+                background: templateId === "landscape"
+                  ? theme.bg
+                  : `radial-gradient(ellipse at 50% 30%, ${theme.accent}15, ${theme.bg})`,
                 border: `2px solid ${theme.accent}40`,
               }}
             >
-              {/* Decorative top arc */}
-              <svg viewBox="0 0 200 60" className="absolute top-4 w-2/3 opacity-40" fill="none">
-                <path d="M10 55 Q100 0 190 55" stroke={theme.accent} strokeWidth="1.5" />
-                <path d="M30 55 Q100 10 170 55" stroke={theme.accent} strokeWidth="1" />
-              </svg>
+              <TemplateRenderer theme={theme} message={message} senderName={senderName} />
+            </div>
 
-              {/* Moon icon */}
-              <div className="text-5xl mb-3">🌙</div>
-
-              <h3
-                className="font-display text-3xl md:text-4xl mb-2"
-                style={{ color: theme.accent, textShadow: `0 0 20px ${theme.accent}60` }}
-              >
-                Eid Mubarak
-              </h3>
-
-              <div
-                className="w-16 h-0.5 mx-auto mb-4"
-                style={{ background: `linear-gradient(90deg, transparent, ${theme.accent}, transparent)` }}
-              />
-
-              <p
-                className="font-body text-sm md:text-base leading-relaxed max-w-[85%]"
-                style={{ color: theme.text }}
-              >
-                {message || "Your message here..."}
-              </p>
-
-              {senderName && (
-                <p
-                  className="font-body text-xs mt-4 italic opacity-80"
-                  style={{ color: theme.accent }}
+            {/* Template selector */}
+            <div className="flex items-center gap-1.5 mb-3 overflow-x-auto pb-1">
+              <span className="font-body text-xs text-muted-foreground shrink-0">Layout:</span>
+              {CARD_TEMPLATES.map((t) => (
+                <button
+                  key={t.id}
+                  className="px-2.5 py-1.5 rounded-full font-body text-xs transition-all shrink-0 flex items-center gap-1"
+                  style={{
+                    background: t.id === templateId ? `${theme.accent}25` : "transparent",
+                    border: `1px solid ${t.id === templateId ? theme.accent + "80" : "hsl(220, 30%, 20%)"}`,
+                    color: t.id === templateId ? theme.accent : "hsl(45, 100%, 80%)",
+                  }}
+                  onClick={() => setTemplateId(t.id)}
                 >
-                  — {senderName}
-                </p>
-              )}
-
-              {/* Decorative bottom arc */}
-              <svg viewBox="0 0 200 40" className="absolute bottom-4 w-2/3 opacity-30" fill="none">
-                <path d="M10 5 Q100 40 190 5" stroke={theme.accent} strokeWidth="1.5" />
-              </svg>
-
-              {/* Corner stars */}
-              <span className="absolute top-3 left-4 text-lg opacity-50">✦</span>
-              <span className="absolute top-3 right-4 text-lg opacity-50">✦</span>
-              <span className="absolute bottom-3 left-4 text-lg opacity-50">✦</span>
-              <span className="absolute bottom-3 right-4 text-lg opacity-50">✦</span>
+                  <span>{t.icon}</span> {t.name}
+                </button>
+              ))}
             </div>
 
             {/* Theme selector */}
