@@ -9,6 +9,7 @@ import EidOverlay from "@/components/EidOverlay";
 import GreetingCardModal from "@/components/GreetingCardModal";
 import MosqueSilhouette from "@/components/MosqueSilhouette";
 import IslamicBorder from "@/components/IslamicBorder";
+import CountdownTimer from "@/components/CountdownTimer";
 
 const wishes = [
   "Eid Mubarak! 🌙",
