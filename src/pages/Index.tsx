@@ -67,6 +67,9 @@ const Index = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [handleMouseMove]);
 
+  // Eid al-Fitr 2026 - March 20, 2026 (approximate date, varies by moon sighting)
+  const eidDate = new Date("2026-03-20T00:00:00");
+
   return (
     <main className="relative min-h-screen sky-gradient overflow-hidden">
       {/* Geometric pattern overlay */}
@@ -131,9 +134,14 @@ const Index = () => {
             style={{ background: "linear-gradient(90deg, transparent, hsl(45, 100%, 50%), transparent)" }}
           />
 
-          <p className="font-body text-foreground/80 text-base md:text-lg font-light max-w-md mx-auto mb-10">
+          <p className="font-body text-foreground/80 text-base md:text-lg font-light max-w-md mx-auto mb-8">
             Tap the lanterns to reveal blessings, or celebrate together
           </p>
+
+          {/* Countdown Timer */}
+          <div className="mb-10">
+            <CountdownTimer targetDate={eidDate} />
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-3 items-center">
             <motion.button
