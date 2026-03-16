@@ -41,6 +41,16 @@ const GreetingCardModal = ({ visible, onClose }: GreetingCardModalProps) => {
     }
   };
 
+  const shareWhatsApp = () => {
+    const shareText = `Eid Mubarak! 🌙✨ ${message || "Wishing you peace and blessings."}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank");
+  };
+
+  const shareTwitter = () => {
+    const shareText = `Eid Mubarak! 🌙✨ ${message || "Wishing you peace and blessings."}`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, "_blank");
+  };
+
   return (
     <AnimatePresence>
       {visible && (
