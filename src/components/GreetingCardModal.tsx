@@ -41,6 +41,16 @@ const GreetingCardModal = ({ visible, onClose }: GreetingCardModalProps) => {
     }
   };
 
+  const shareWhatsApp = () => {
+    const shareText = `Eid Mubarak! 🌙✨ ${message || "Wishing you peace and blessings."}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank");
+  };
+
+  const shareTwitter = () => {
+    const shareText = `Eid Mubarak! 🌙✨ ${message || "Wishing you peace and blessings."}`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, "_blank");
+  };
+
   return (
     <AnimatePresence>
       {visible && (
@@ -175,6 +185,31 @@ const GreetingCardModal = ({ visible, onClose }: GreetingCardModalProps) => {
               onChange={(e) => setSenderName(e.target.value)}
               maxLength={40}
             />
+
+            {/* Share buttons */}
+            <div className="mb-4">
+              <p className="font-body text-muted-foreground text-xs uppercase tracking-widest mb-2 text-center">
+                Share your greeting
+              </p>
+              <div className="flex items-center justify-center gap-2">
+                <motion.button
+                  className="px-3 py-2 rounded-full font-body text-xs font-medium bg-[hsl(142,70%,40%)] text-white flex items-center gap-1.5"
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={shareWhatsApp}
+                >
+                  💬 WhatsApp
+                </motion.button>
+                <motion.button
+                  className="px-3 py-2 rounded-full font-body text-xs font-medium bg-[hsl(203,89%,53%)] text-white flex items-center gap-1.5"
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={shareTwitter}
+                >
+                  🐦 Twitter
+                </motion.button>
+              </div>
+            </div>
 
             {/* Actions */}
             <div className="flex gap-3">
