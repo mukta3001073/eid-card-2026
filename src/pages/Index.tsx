@@ -180,6 +180,8 @@ const Index = () => {
             >
               ✉️ Create Greeting Card
             </motion.button>
+
+            <SecretDuaButton />
           </div>
         </motion.div>
       </section>
