@@ -186,6 +186,9 @@ const Index = () => {
         </motion.div>
       </section>
 
+      {/* Eid Wish Wall */}
+      <EidWishWall />
+
       {/* Mosque silhouette horizon */}
       <MosqueSilhouette />
       <IslamicBorder />
