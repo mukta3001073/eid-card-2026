@@ -68,7 +68,15 @@ const Index = () => {
   }, [handleMouseMove]);
 
   // Eid al-Fitr 2026 - March 20, 2026 (approximate date, varies by moon sighting)
-  const eidDate = new Date("2026-03-20T00:00:00");
+  const [eidDate, setEidDate] = useState<Date>(() => {
+    const saved = localStorage.getItem("eid-target-date");
+    return saved ? new Date(saved) : new Date("2026-03-20T00:00:00");
+  });
+
+  const handleEidDateChange = (date: Date) => {
+    setEidDate(date);
+    localStorage.setItem("eid-target-date", date.toISOString());
+  };
 
   return (
     <main className="relative min-h-screen sky-gradient overflow-hidden">
@@ -140,7 +148,7 @@ const Index = () => {
 
           {/* Countdown Timer */}
           <div className="mb-10">
-            <CountdownTimer targetDate={eidDate} />
+            <CountdownTimer targetDate={eidDate} onDateChange={handleEidDateChange} />
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 items-center">
