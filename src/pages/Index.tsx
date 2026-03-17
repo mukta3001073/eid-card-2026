@@ -46,9 +46,22 @@ const Index = () => {
 
   const ambient = useAmbientSound();
 
+  const fireGoldenConfetti = () => {
+    const gold = ["#FFD700", "#FFC107", "#FFB300", "#FFCA28", "#F9A825"];
+    const defaults = { colors: gold, ticks: 200, gravity: 0.6, scalar: 1.2, shapes: ["circle" as const, "square" as const] };
+
+    confetti({ ...defaults, particleCount: 80, spread: 100, origin: { x: 0.3, y: 0.5 } });
+    confetti({ ...defaults, particleCount: 80, spread: 100, origin: { x: 0.7, y: 0.5 } });
+
+    setTimeout(() => {
+      confetti({ ...defaults, particleCount: 50, spread: 120, origin: { x: 0.5, y: 0.3 }, gravity: 0.4 });
+    }, 300);
+  };
+
   const handleCelebrate = () => {
     setIsRising(true);
     ambient.play();
+    fireGoldenConfetti();
     setTimeout(() => setShowOverlay(true), 1500);
   };
 
