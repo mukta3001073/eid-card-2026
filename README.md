@@ -1,4 +1,13 @@
-# Welcome to your Lovable project
+# # Eid Wish Card 🌙
+
+A fun interactive Eid greeting card web app.
+
+## Features
+- Celebrate eid 
+- Counting eid days time 
+- Eid Wish Wall
+- Secret Dua Button
+- Responsive design
 
 ## Project info
 
