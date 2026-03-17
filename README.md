@@ -19,10 +19,6 @@ Check out the live website here: [Live Demo](https://eid-card-2026.netlify.app/)
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
----
-
-## Screenshots
-
 
 ---
 
