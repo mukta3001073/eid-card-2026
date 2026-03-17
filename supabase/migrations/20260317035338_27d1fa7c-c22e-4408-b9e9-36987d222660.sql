@@ -1,0 +1,1 @@
+CREATE POLICY "Anyone can delete wishes" ON public.eid_wishes FOR DELETE USING (true);
