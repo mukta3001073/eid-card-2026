@@ -10,6 +10,8 @@ import GreetingCardModal from "@/components/GreetingCardModal";
 import MosqueSilhouette from "@/components/MosqueSilhouette";
 import IslamicBorder from "@/components/IslamicBorder";
 import CountdownTimer from "@/components/CountdownTimer";
+import EidWishWall from "@/components/EidWishWall";
+import SecretDuaButton from "@/components/SecretDuaButton";
 
 const wishes = [
   "Eid Mubarak! 🌙",
@@ -178,9 +180,14 @@ const Index = () => {
             >
               ✉️ Create Greeting Card
             </motion.button>
+
+            <SecretDuaButton />
           </div>
         </motion.div>
       </section>
+
+      {/* Eid Wish Wall */}
+      <EidWishWall />
 
       {/* Mosque silhouette horizon */}
       <MosqueSilhouette />
