@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send } from "lucide-react";
+import { Send, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Wish {
   id: string;
@@ -16,6 +26,7 @@ const EidWishWall = () => {
   const [message, setMessage] = useState("");
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [sending, setSending] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   useEffect(() => {
     fetchWishes();
@@ -27,6 +38,13 @@ const EidWishWall = () => {
         { event: "INSERT", schema: "public", table: "eid_wishes" },
         (payload) => {
           setWishes((prev) => [payload.new as Wish, ...prev]);
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "eid_wishes" },
+        (payload) => {
+          setWishes((prev) => prev.filter((w) => w.id !== (payload.old as { id: string }).id));
         }
       )
       .subscribe();
@@ -72,6 +90,21 @@ const EidWishWall = () => {
       toast({ title: "Wish sent! 🌙" });
     }
     setSending(false);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    const { error } = await supabase
+      .from("eid_wishes")
+      .delete()
+      .eq("id", deleteTarget);
+
+    if (error) {
+      toast({ title: "Failed to delete wish", variant: "destructive" });
+    } else {
+      toast({ title: "Wish deleted 🗑️" });
+    }
+    setDeleteTarget(null);
   };
 
   return (
@@ -129,15 +162,16 @@ const EidWishWall = () => {
 
         {/* Wishes Grid */}
         <div className="grid gap-4">
-          <AnimatePresence>
+          <AnimatePresence mode="popLayout">
             {wishes.map((wish, i) => (
               <motion.div
                 key={wish.id}
+                layout
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.3 } }}
                 transition={{ delay: i < 10 ? i * 0.05 : 0 }}
-                className="rounded-xl p-5 relative overflow-hidden"
+                className="rounded-xl p-5 relative overflow-hidden group"
                 style={{
                   background: "linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)",
                   border: "1px solid hsl(var(--primary) / 0.15)",
@@ -145,8 +179,18 @@ const EidWishWall = () => {
                 }}
               >
                 <div className="absolute inset-0 geometric-pattern opacity-30" />
+
+                {/* Delete button */}
+                <button
+                  onClick={() => setDeleteTarget(wish.id)}
+                  className="absolute top-3 right-3 z-20 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 bg-destructive/10 hover:bg-destructive/90 text-muted-foreground hover:text-destructive-foreground"
+                  aria-label="Delete wish"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+
                 <div className="relative z-10">
-                  <p className="font-body text-foreground text-sm mb-3 leading-relaxed">
+                  <p className="font-body text-foreground text-sm mb-3 leading-relaxed pr-8">
                     "{wish.message}"
                   </p>
                   <div className="flex items-center justify-between">
@@ -169,6 +213,24 @@ const EidWishWall = () => {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <AlertDialogContent className="bg-card border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-foreground">Delete this wish?</AlertDialogTitle>
+            <AlertDialogDescription className="text-muted-foreground">
+              Are you sure you want to delete this wish? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-border text-foreground">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 };
