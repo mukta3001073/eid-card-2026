@@ -148,7 +148,7 @@ const Index = () => {
 
           {/* Countdown Timer */}
           <div className="mb-10">
-            <CountdownTimer targetDate={eidDate} />
+            <CountdownTimer targetDate={eidDate} onDateChange={handleEidDateChange} />
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 items-center">
