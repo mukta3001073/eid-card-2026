@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAmbientSound } from "@/hooks/useAmbientSound";
 import { motion } from "framer-motion";
+import confetti from "canvas-confetti";
 import Stars from "@/components/Stars";
 import CrescentMoon from "@/components/CrescentMoon";
 import Lantern from "@/components/Lantern";
