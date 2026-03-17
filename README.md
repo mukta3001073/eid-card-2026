@@ -2,6 +2,10 @@
 
 A fun interactive Eid greeting card web app.
 
+
+## Live Demo
+Check out the live website here: [Live Demo](https://eid-card-2026.netlify.app/)
+
 ## Features
 - Celebrate eid 
 - Counting eid days time 
@@ -80,6 +84,3 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
-
-## Live Demo
-Check out the live website here: [Live Demo](https://eid-card-2026.netlify.app/)
