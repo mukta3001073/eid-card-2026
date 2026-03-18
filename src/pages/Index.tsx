@@ -198,6 +198,7 @@ const Index = () => {
             </motion.button>
 
             <SecretDuaButton />
+            <EidiSurpriseButton />
           </div>
         </motion.div>
       </section>
