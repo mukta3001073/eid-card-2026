@@ -201,6 +201,9 @@ const Index = () => {
         </motion.div>
       </section>
 
+      {/* Share Section */}
+      <ShareSection />
+
       {/* Eid Wish Wall */}
       <EidWishWall />
 
