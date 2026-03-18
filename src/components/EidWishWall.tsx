@@ -105,7 +105,7 @@ const EidWishWall = () => {
       .insert({ wish_id: wishId, emoji });
   };
 
-
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedName = name.trim();
     const trimmedMessage = message.trim();
