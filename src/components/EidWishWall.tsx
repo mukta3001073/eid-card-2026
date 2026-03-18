@@ -31,9 +31,11 @@ const EidWishWall = () => {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [sending, setSending] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [reactions, setReactions] = useState<ReactionCount>({});
 
   useEffect(() => {
     fetchWishes();
+    fetchReactions();
 
     const channel = supabase
       .channel("eid-wishes-realtime")
@@ -49,6 +51,18 @@ const EidWishWall = () => {
         { event: "DELETE", schema: "public", table: "eid_wishes" },
         (payload) => {
           setWishes((prev) => prev.filter((w) => w.id !== (payload.old as { id: string }).id));
+          setReactions((prev) => {
+            const next = { ...prev };
+            delete next[(payload.old as { id: string }).id];
+            return next;
+          });
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "eid_wish_reactions" },
+        () => {
+          fetchReactions();
         }
       )
       .subscribe();
