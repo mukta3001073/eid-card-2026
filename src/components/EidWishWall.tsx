@@ -21,15 +21,21 @@ interface Wish {
   created_at: string;
 }
 
+interface ReactionCount {
+  [wishId: string]: { "❤️": number; "🤲": number };
+}
+
 const EidWishWall = () => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [sending, setSending] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [reactions, setReactions] = useState<ReactionCount>({});
 
   useEffect(() => {
     fetchWishes();
+    fetchReactions();
 
     const channel = supabase
       .channel("eid-wishes-realtime")
@@ -45,6 +51,18 @@ const EidWishWall = () => {
         { event: "DELETE", schema: "public", table: "eid_wishes" },
         (payload) => {
           setWishes((prev) => prev.filter((w) => w.id !== (payload.old as { id: string }).id));
+          setReactions((prev) => {
+            const next = { ...prev };
+            delete next[(payload.old as { id: string }).id];
+            return next;
+          });
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "eid_wish_reactions" },
+        () => {
+          fetchReactions();
         }
       )
       .subscribe();
@@ -64,6 +82,27 @@ const EidWishWall = () => {
     if (!error && data) {
       setWishes(data);
     }
+  };
+
+  const fetchReactions = async () => {
+    const { data } = await supabase
+      .from("eid_wish_reactions")
+      .select("wish_id, emoji");
+
+    if (data) {
+      const counts: ReactionCount = {};
+      data.forEach((r: { wish_id: string; emoji: string }) => {
+        if (!counts[r.wish_id]) counts[r.wish_id] = { "❤️": 0, "🤲": 0 };
+        if (r.emoji === "❤️" || r.emoji === "🤲") counts[r.wish_id][r.emoji]++;
+      });
+      setReactions(counts);
+    }
+  };
+
+  const handleReaction = async (wishId: string, emoji: "❤️" | "🤲") => {
+    await supabase
+      .from("eid_wish_reactions")
+      .insert({ wish_id: wishId, emoji });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -200,6 +239,21 @@ const EidWishWall = () => {
                     <span className="font-body text-muted-foreground text-xs">
                       {new Date(wish.created_at).toLocaleDateString()}
                     </span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/50">
+                    {(["❤️", "🤲"] as const).map((emoji) => (
+                      <motion.button
+                        key={emoji}
+                        onClick={() => handleReaction(wish.id, emoji)}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-body bg-muted/60 hover:bg-primary/20 transition-colors"
+                        whileTap={{ scale: 1.3 }}
+                      >
+                        <span>{emoji}</span>
+                        <span className="text-muted-foreground">
+                          {reactions[wish.id]?.[emoji] || 0}
+                        </span>
+                      </motion.button>
+                    ))}
                   </div>
                 </div>
               </motion.div>

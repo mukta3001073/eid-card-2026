@@ -14,6 +14,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      eid_wish_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          wish_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          wish_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          wish_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eid_wish_reactions_wish_id_fkey"
+            columns: ["wish_id"]
+            isOneToOne: false
+            referencedRelation: "eid_wishes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       eid_wishes: {
         Row: {
           created_at: string
