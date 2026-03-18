@@ -4,7 +4,7 @@ A beautiful and interactive Eid greeting website built using HTML, CSS, and Java
 This project allows users to share Eid wishes, make secret duas, and enjoy festive animations.
 
 ---
-##🔗 Live Demo
+## 🔗 Live Demo
 Check out the live website here: [Live Demo](https://eid-card-2026.netlify.app/)
 
 ---
