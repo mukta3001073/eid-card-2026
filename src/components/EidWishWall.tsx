@@ -194,8 +194,8 @@ const EidWishWall = () => {
                     "{wish.message}"
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="font-body text-primary text-xs font-semibold">
-                      — {wish.name}
+                    <span className="font-body text-primary text-xs font-semibold flex items-center gap-1">
+                      🌙 {wish.name}
                     </span>
                     <span className="font-body text-muted-foreground text-xs">
                       {new Date(wish.created_at).toLocaleDateString()}

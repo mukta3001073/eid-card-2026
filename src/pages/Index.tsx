@@ -13,6 +13,7 @@ import IslamicBorder from "@/components/IslamicBorder";
 import CountdownTimer from "@/components/CountdownTimer";
 import EidWishWall from "@/components/EidWishWall";
 import SecretDuaButton from "@/components/SecretDuaButton";
+import ShareSection from "@/components/ShareSection";
 
 const wishes = [
   "Eid Mubarak! 🌙",
@@ -199,6 +200,9 @@ const Index = () => {
           </div>
         </motion.div>
       </section>
+
+      {/* Share Section */}
+      <ShareSection />
 
       {/* Eid Wish Wall */}
       <EidWishWall />
