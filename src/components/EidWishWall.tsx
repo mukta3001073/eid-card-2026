@@ -84,7 +84,28 @@ const EidWishWall = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const fetchReactions = async () => {
+    const { data } = await supabase
+      .from("eid_wish_reactions")
+      .select("wish_id, emoji");
+
+    if (data) {
+      const counts: ReactionCount = {};
+      data.forEach((r: { wish_id: string; emoji: string }) => {
+        if (!counts[r.wish_id]) counts[r.wish_id] = { "❤️": 0, "🤲": 0 };
+        if (r.emoji === "❤️" || r.emoji === "🤲") counts[r.wish_id][r.emoji]++;
+      });
+      setReactions(counts);
+    }
+  };
+
+  const handleReaction = async (wishId: string, emoji: "❤️" | "🤲") => {
+    await supabase
+      .from("eid_wish_reactions")
+      .insert({ wish_id: wishId, emoji });
+  };
+
+
     e.preventDefault();
     const trimmedName = name.trim();
     const trimmedMessage = message.trim();
