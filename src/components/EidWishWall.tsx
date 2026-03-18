@@ -240,6 +240,21 @@ const EidWishWall = () => {
                       {new Date(wish.created_at).toLocaleDateString()}
                     </span>
                   </div>
+                  <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/50">
+                    {(["❤️", "🤲"] as const).map((emoji) => (
+                      <motion.button
+                        key={emoji}
+                        onClick={() => handleReaction(wish.id, emoji)}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-body bg-muted/60 hover:bg-primary/20 transition-colors"
+                        whileTap={{ scale: 1.3 }}
+                      >
+                        <span>{emoji}</span>
+                        <span className="text-muted-foreground">
+                          {reactions[wish.id]?.[emoji] || 0}
+                        </span>
+                      </motion.button>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             ))}
