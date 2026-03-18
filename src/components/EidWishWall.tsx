@@ -21,6 +21,10 @@ interface Wish {
   created_at: string;
 }
 
+interface ReactionCount {
+  [wishId: string]: { "❤️": number; "🤲": number };
+}
+
 const EidWishWall = () => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
