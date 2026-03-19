@@ -99,16 +99,21 @@ const Index = () => {
 
   return (
     <main className="relative min-h-screen sky-gradient overflow-hidden">
-      {/* Volume control - visible when audio is playing */}
+      {/* Audio controls - visible when playing */}
       {ambient.isPlaying && (
         <motion.div
-          className="fixed top-4 right-4 flex items-center gap-2 glass-overlay rounded-full px-4 py-2"
+          className="fixed top-4 right-4 flex items-center gap-2 glass-overlay rounded-full px-3 py-2"
           style={{ zIndex: 100 }}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 20 }}
         >
-          <span className="text-xs text-foreground/70">🔊</span>
+          <motion.button
+            className="text-foreground/80 hover:text-primary transition-colors"
+            whileTap={{ scale: 0.9 }}
+            onClick={() => ambient.setVolume(ambient.volume > 0 ? 0 : 0.5)}
+          >
+            {ambient.volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </motion.button>
           <input
             type="range"
             min="0"
