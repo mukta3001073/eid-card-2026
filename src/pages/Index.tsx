@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 import { useAmbientSound } from "@/hooks/useAmbientSound";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
