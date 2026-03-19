@@ -1,9 +1,11 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 
 // Generates ambient pad + Eid Takbeer melodic chant using Web Audio API
 export const useAmbientSound = () => {
   const ctxRef = useRef<AudioContext | null>(null);
   const nodesRef = useRef<{ gainNode: GainNode; oscillators: OscillatorNode[]; lfos: OscillatorNode[] } | null>(null);
+  const [volume, setVolumeState] = useState(0.5);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const playTakbeerMelody = (ctx: AudioContext, destination: AudioNode) => {
     // Takbeer melody pattern: "Allahu Akbar" tonal sequence
