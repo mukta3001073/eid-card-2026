@@ -1,9 +1,11 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 
 // Generates ambient pad + Eid Takbeer melodic chant using Web Audio API
 export const useAmbientSound = () => {
   const ctxRef = useRef<AudioContext | null>(null);
   const nodesRef = useRef<{ gainNode: GainNode; oscillators: OscillatorNode[]; lfos: OscillatorNode[] } | null>(null);
+  const [volume, setVolumeState] = useState(0.5);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const playTakbeerMelody = (ctx: AudioContext, destination: AudioNode) => {
     // Takbeer melody pattern: "Allahu Akbar" tonal sequence
@@ -95,18 +97,26 @@ export const useAmbientSound = () => {
     return oscs;
   };
 
+  const setVolume = useCallback((v: number) => {
+    setVolumeState(v);
+    if (nodesRef.current && ctxRef.current) {
+      const maxGain = v * 0.24; // scale: 0-1 → 0-0.24
+      nodesRef.current.gainNode.gain.linearRampToValueAtTime(maxGain, ctxRef.current.currentTime + 0.1);
+    }
+  }, []);
+
   const play = useCallback(() => {
     if (nodesRef.current) return;
 
     const ctx = new AudioContext();
     ctxRef.current = ctx;
 
+    const maxGain = volume * 0.24;
     const masterGain = ctx.createGain();
     masterGain.gain.setValueAtTime(0, ctx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 2);
+    masterGain.gain.linearRampToValueAtTime(maxGain, ctx.currentTime + 2);
     masterGain.connect(ctx.destination);
 
-    // Ambient pad chord: D3, A3, F#4, A4
     const frequencies = [146.83, 220, 369.99, 440];
     const oscillators: OscillatorNode[] = [];
     const lfos: OscillatorNode[] = [];
@@ -133,12 +143,12 @@ export const useAmbientSound = () => {
       oscillators.push(osc);
     });
 
-    // Play Takbeer melody on top
     const melodyOscs = playTakbeerMelody(ctx, ctx.destination);
     oscillators.push(...melodyOscs);
 
     nodesRef.current = { gainNode: masterGain, oscillators, lfos };
-  }, []);
+    setIsPlaying(true);
+  }, [volume]);
 
   const stop = useCallback(() => {
     if (!nodesRef.current || !ctxRef.current) return;
@@ -153,7 +163,8 @@ export const useAmbientSound = () => {
       nodesRef.current = null;
       ctxRef.current = null;
     }, 1600);
+    setIsPlaying(false);
   }, []);
 
-  return { play, stop };
+  return { play, stop, volume, setVolume, isPlaying };
 };

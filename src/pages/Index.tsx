@@ -98,6 +98,28 @@ const Index = () => {
 
   return (
     <main className="relative min-h-screen sky-gradient overflow-hidden">
+      {/* Volume control - visible when audio is playing */}
+      {ambient.isPlaying && (
+        <motion.div
+          className="fixed top-4 right-4 flex items-center gap-2 glass-overlay rounded-full px-4 py-2"
+          style={{ zIndex: 100 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 20 }}
+        >
+          <span className="text-xs text-foreground/70">🔊</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={ambient.volume}
+            onChange={(e) => ambient.setVolume(parseFloat(e.target.value))}
+            className="w-20 h-1 accent-primary cursor-pointer"
+          />
+        </motion.div>
+      )}
+
       {/* Geometric pattern overlay */}
       <div className="absolute inset-0 geometric-pattern" style={{ zIndex: 1 }} />
 
