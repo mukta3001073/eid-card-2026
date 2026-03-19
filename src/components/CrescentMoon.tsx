@@ -41,7 +41,7 @@ const CrescentMoon = () => {
     <>
       <motion.div
         className="absolute cursor-pointer"
-        style={{ top: "8%", right: "15%", zIndex: 20 }}
+        style={{ top: "6%", right: "10%", zIndex: 30 }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 2, ease: "easeOut" }}
@@ -49,24 +49,25 @@ const CrescentMoon = () => {
         whileTap={{ scale: 0.95 }}
         onClick={handleClick}
       >
-        <div className="relative w-24 h-24 md:w-36 md:h-36 lg:w-44 lg:h-44">
-          {/* Moon glow - intensifies on hover via parent */}
+        <div className="relative w-28 h-28 md:w-40 md:h-40 lg:w-48 lg:h-48">
+          {/* Moon glow */}
           <motion.div
             className="absolute inset-0 rounded-full"
             style={{
-              background: "radial-gradient(circle, hsla(45, 100%, 80%, 0.3) 0%, transparent 70%)",
-              transform: "scale(2.5)",
+              background: "radial-gradient(circle, hsla(45, 100%, 80%, 0.35) 0%, transparent 70%)",
+              transform: "scale(2.8)",
             }}
-            whileHover={{
-              background: "radial-gradient(circle, hsla(45, 100%, 85%, 0.5) 0%, transparent 70%)",
+            animate={{
+              opacity: [0.7, 1, 0.7],
             }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
           {/* Moon body */}
           <div
-            className="absolute inset-0 rounded-full transition-shadow duration-300"
+            className="absolute inset-0 rounded-full"
             style={{
               background: "radial-gradient(circle at 35% 35%, hsl(45, 100%, 92%), hsl(45, 80%, 75%))",
-              boxShadow: "0 0 40px hsla(45, 100%, 70%, 0.5), 0 0 80px hsla(45, 100%, 60%, 0.3)",
+              boxShadow: "0 0 50px hsla(45, 100%, 70%, 0.6), 0 0 100px hsla(45, 100%, 60%, 0.35)",
             }}
           />
           {/* Crescent shadow */}
@@ -82,6 +83,15 @@ const CrescentMoon = () => {
             }}
           />
         </div>
+        {/* Hint text */}
+        <motion.p
+          className="text-center font-body text-xs md:text-sm mt-1"
+          style={{ color: "hsl(var(--glow-gold))" }}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Tap the moon 🌙
+        </motion.p>
       </motion.div>
 
       {/* Popup message */}
